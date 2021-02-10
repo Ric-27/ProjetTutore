@@ -20,7 +20,7 @@ thickness = 2
 
 window_width = 2280
 window_height = 3220
-scale = 0.2
+scale = 0.25
 
 
 # initialize the first frame in the video stream
@@ -88,16 +88,16 @@ while True:
     #pts = pts_src.reshape((-1,1,2))
     #cv2.polylines(img,[pts],True,(255,255,0),thickness)
     img = imutils.resize(img, height = math.floor(window_height*scale))
-    #img_hor = np.concatenate((img,frame), axis=1)
-    #cv2.imshow("Feed", img_hor)
+    img_hor = np.concatenate((img,frame), axis=1)
+    cv2.imshow("Feed", img_hor)
 
     # show the frame and record if the user presses a key
-    cv2.imshow("Original Feed", img)
-    cv2.imshow("Security Feed", frame)
-    cv2.imshow("Thresh", thresh)
-    cv2.imshow("Frame Delta", frameDelta)
-    #img_hor = np.concatenate((thresh,frameDelta), axis=1)
-    #cv2.imshow("Tracking Parameters", img_hor)
+    #cv2.imshow("Original Feed", img)
+    #cv2.imshow("Security Feed", frame)
+    #cv2.imshow("Thresh", thresh)
+    #cv2.imshow("Frame Delta", frameDelta)
+    img_hor = np.concatenate((thresh,frameDelta), axis=1)
+    cv2.imshow("Tracking Parameters", img_hor)
     
     key = cv2.waitKey(1) & 0xFF
 
