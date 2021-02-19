@@ -84,5 +84,5 @@ mv $dataset"MM-Malt-Img-"$master"/NuageImProf_STD-MALT_Etape_7.xml" $outDir
 cp $thisBashFile $outDir
 
 # remove all data and micmac by-product
-rm -r $dataset"/"!(*.jpg|*.csv) # extra "/" just for security
+# rm -r $dataset"/"!(*.jpg|*.csv) # extra "/" just for security
 

@@ -1,9 +1,6 @@
 import numpy as np
 import cv2
 from cv2 import aruco
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-# import re
 import sys
 import glob
 import os
@@ -38,7 +35,6 @@ def markers_center(img):
     for i in range(len(ids)):
         c = corners[i][0]
         centers[i,:] = [c[:, 0].mean(), c[:, 1].mean()]
-        #plt.plot([c[:, 0]], [c[:, 1]], ".")
     return centers, ids
 
 if __name__=="__main__":
@@ -66,6 +62,8 @@ if __name__=="__main__":
     tree.write(output_directory+'/Mesure-Appuis.xml', xml_declaration=True)
 
 '''
+if you don't want to use the terminal
+
 runfile('/home/iad/Documents/ENSTA/3A/projet_tuteure/test/script/markerToMicmac.py',
         wdir='/home/iad/Documents/ENSTA/3A/projet_tuteure/test/script',
         args="'../marker/bedroomMarkerDataset/1_noruller_?.jpg' ./")
@@ -75,23 +73,4 @@ debugfile('/home/iad/Documents/ENSTA/3A/projet_tuteure/test/script/markerToMicma
           args="'../marker/bedroomMarkerDataset/1_noruller_?.jpg' ./")
 
 '''
-
-'''
-import re
-p = re.compile('[a-z]+')
-m = p.match('::: message')
-print(m)
-m = p.search('::: message')
-print(m)
-m = p.search('::: message ::: truc')
-print(m)
-m = p.findall('::: message ::: truc')
-print(m)
-'''
-
-
-
-
-
-
 
