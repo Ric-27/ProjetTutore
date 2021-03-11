@@ -1,6 +1,9 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/linux,vscode,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,vscode,python
+
+# stuff I dont want
+david_code/
+
 
 ### Linux ###
 *~
