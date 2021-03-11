@@ -7,19 +7,19 @@
 export PATH=/home/iad/Documents/ENSTA/3A/projet_tuteure/micmac/bin:$PATH
 
 # parameters : dataset and master image
-dataset="marker/bedroomMoreMarkerDataset/"
+dataset="../test/marker/debug4Dataset/"
 imgs_bash="1_*" # expression reguliere tel qu'acceptee par le shell bash
 imgs_MM="1_.*" # expression reguliere tel qu'acceptee par MICMAC
 master="1_5"
 csv="3D_target.csv"
 
 # parameters : output directory
-outDir="marker/out/" # don't create this directory inside the dataset (or it is going to be removed)
+outDir="../test/marker/debug4Out/" # don't create this directory inside the dataset (or it is going to be removed)
 
 # parameters : script
-markerToMicmacpy="script/markerToMicmac.py"
-dicoAppuisXMLpy="script/dicoAppuisXML.py"
-thisBashFile="script/groundControlAndPhotogramme.bash"
+markerToMicmacpy="./markerToMicmac.py"
+dicoAppuisXMLpy="./dicoAppuisXML.py"
+thisBashFile="./groundControlAndPhotogramme.bash"
 
 # parameters : other MICMAC paramters
 cameraModel="FraserBasic"
