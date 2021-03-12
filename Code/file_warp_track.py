@@ -1,4 +1,5 @@
 #code from https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv/
+# and https://www.geeksforgeeks.org/reading-writing-text-files-python/
 
 # import the necessary packages
 import datetime
@@ -8,11 +9,15 @@ import cv2
 import numpy as np
 import math
 
-cap = cv2.VideoCapture('../ric_test.mp4')
+cap = cv2.VideoCapture('ric_test.mp4')
 success,img = cap.read()
 
-pts_src = np.array([[475,211,0],[660,247,0],[1111,322,0],[915,360,0],[1163,630,0],[729,634,0],[370,638,0],[162,630,0],[67,428,0],[378,360,0],[233,308,0]], np.int32)
+#pts_src = np.array([[475,211,0],[660,247,0],[1111,322,0],[915,360,0],[1163,630,0],[729,634,0],[370,638,0],[162,630,0],[67,428,0],[378,360,0],[233,308,0]], np.int32)
 pts_dst = np.array([[200,0,0],[1170,1070,0],[2280,2170,0],[1680,2400,0],[1680,3220,0],[1110,3220,0],[730,3220,0],[500,3220,0],[30,2700,0],[500,2400,0],[0,2100,0]], np.int32)
+
+#np.savetxt("config.txt",pts_src)
+
+pts_src = np.loadtxt("config.txt",dtype=np.int32)
 
 pts_plane1 = np.array([[480,397,1],[816,395,1],[819,404,1],[479,406,1]],np.int32)
 pts_plane2 = np.array([[482,374,2],[815,372,2],[819,375,2],[480,377,2]],np.int32)
