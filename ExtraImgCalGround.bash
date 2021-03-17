@@ -15,7 +15,7 @@ master="1_5"
 csv="3D_target.csv"
 
 # parameters : output directory
-outDir="../test/marker/AllCalibTwodepth_RadialStd_-1_Out/" # don't create this directory inside the dataset (or it is going to be removed)
+outDir="../test/marker/AllCalibTwodepth_RadialBasic_-1_noApericloud_Out/" # don't create this directory inside the dataset (or it is going to be removed)
 
 # parameters : script
 markerToMicmacpy="./markerToMicmac.py"
@@ -23,7 +23,7 @@ dicoAppuisXMLpy="./dicoAppuisXML.py"
 thisBashFile="./ExtraImgCalGround.bash"
 
 # parameters : other MICMAC paramters
-cameraModel="RadialStd" # RadialBasic 5 parameters, RadialStd 8 parameters
+cameraModel="RadialBasic" # RadialBasic 5 parameters, RadialStd 8 parameters
 tapiocaImgResolution="-1" #1500 seems standard. -1 for full resolution
 Arbitrary="Arbitrary"
 Ground_Init="Ground_Init"
@@ -69,14 +69,14 @@ mm3d Tapioca All $dataset$cal_and_ground_imgs_MM".jpg" $tapiocaImgResolution | c
 echo "Tapioca DONE"
 mm3d Tapas $cameraModel $dataset$cal_and_ground_imgs_MM".jpg" Out=$Arbitrary | cat > $outDir"Tapas.log"
 echo "Tapas DONE"
-mm3d AperiCloud $dataset$cal_and_ground_imgs_MM".jpg" $Arbitrary | cat > $outDir"AperiCloud_"$Arbitrary".log"
-echo "AperiCloud Arbitrary DONE "
+# mm3d AperiCloud $dataset$cal_and_ground_imgs_MM".jpg" $Arbitrary | cat > $outDir"AperiCloud_"$Arbitrary".log"
+# echo "AperiCloud Arbitrary DONE "
 mm3d GCPBascule $dataset$cal_and_ground_imgs_MM".jpg" $Arbitrary $Ground_Init Dico-Appuis.xml Mesure-Appuis.xml | cat > $outDir"GCPBascule.log"
 echo "GCPBascule DONE"
 mm3d Campari $dataset$cal_and_ground_imgs_MM".jpg" $Ground_Init $Ground | cat > $outDir"Campari.log"
 echo "Campari DONE"
-mm3d AperiCloud $dataset$cal_and_ground_imgs_MM".jpg" $Ground | cat > $outDir"AperiCloud_"$Ground".log"
-echo "AperiCloud Ground DONE"
+# mm3d AperiCloud $dataset$cal_and_ground_imgs_MM".jpg" $Ground | cat > $outDir"AperiCloud_"$Ground".log"
+# echo "AperiCloud Ground DONE"
 mm3d Malt GeomImage $dataset$imgs_MM".jpg" $Ground Master=$master".jpg" ZoomF=2 | cat > $outDir"Malt.log"
 echo "Malt DONE"
 # Usefull in dev only. To be removed. *.ply point cloud usefull only for visualisation
@@ -84,7 +84,7 @@ mm3d Nuage2Ply $dataset"MM-Malt-Img-"$master"/NuageImProf_STD-MALT_Etape_7.xml" 
 echo "Nuage2Ply DONE"
 
 # save output
-mv $dataset"AperiCloud_"$Ground".ply" $outDir # Usefull in dev only. To be removed.
+# mv $dataset"AperiCloud_"$Ground".ply" $outDir # Usefull in dev only. To be removed.
 mv $dataset$master".ply" $outDir # Usefull in dev only. To be removed.
 mv $dataset"MM-Malt-Img-"$master"/NuageImProf_STD-MALT_Etape_7.xml" $outDir
 cp $thisBashFile $outDir
