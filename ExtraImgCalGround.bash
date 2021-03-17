@@ -15,7 +15,7 @@ master="1_5"
 csv="3D_target.csv"
 
 # parameters : output directory
-outDir="../test/marker/AllCalibTwodepthOut/" # don't create this directory inside the dataset (or it is going to be removed)
+outDir="../test/marker/AllCalibTwodepth_RadialStd_-1_Out/" # don't create this directory inside the dataset (or it is going to be removed)
 
 # parameters : script
 markerToMicmacpy="./markerToMicmac.py"
@@ -23,7 +23,8 @@ dicoAppuisXMLpy="./dicoAppuisXML.py"
 thisBashFile="./ExtraImgCalGround.bash"
 
 # parameters : other MICMAC paramters
-cameraModel="FraserBasic"
+cameraModel="RadialStd" # RadialBasic 5 parameters, RadialStd 8 parameters
+tapiocaImgResolution="-1" #1500 seems standard. -1 for full resolution
 Arbitrary="Arbitrary"
 Ground_Init="Ground_Init"
 Ground="Ground"
@@ -39,6 +40,8 @@ echo "outDir="$outDir
 echo "markerToMicmacpy="$markerToMicmacpy
 echo "dicoAppuisXMLpy="$dicoAppuisXMLpy
 echo "thisBashFile="$thisBashFile
+echo "cameraModel="$cameraModel
+echo "tapiocaImgResolution="$tapiocaImgResolution
 echo "Arbitrary="$Arbitrary
 echo "Ground_Init="$Ground_Init
 echo "Ground="$Ground
@@ -62,7 +65,7 @@ echo "markerToMicmac.py DONE"
 
 
 # perform calibration again using the previous one and then photogrammetry using MICMAC
-mm3d Tapioca All $dataset$cal_and_ground_imgs_MM".jpg" 1500 | cat > $outDir"Tapioca.log"
+mm3d Tapioca All $dataset$cal_and_ground_imgs_MM".jpg" $tapiocaImgResolution | cat > $outDir"Tapioca.log"
 echo "Tapioca DONE"
 mm3d Tapas $cameraModel $dataset$cal_and_ground_imgs_MM".jpg" Out=$Arbitrary | cat > $outDir"Tapas.log"
 echo "Tapas DONE"
