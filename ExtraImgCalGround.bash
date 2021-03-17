@@ -89,6 +89,6 @@ mv $dataset$master".ply" $outDir # Usefull in dev only. To be removed.
 mv $dataset"MM-Malt-Img-"$master"/NuageImProf_STD-MALT_Etape_7.xml" $outDir
 cp $thisBashFile $outDir
 
-# remove all data and micmac by-product
-# rm -r $dataset"/"!(*.jpg|*.csv) # extra "/" just for security
+# remove all data and micmac by-product in the dataset
+# rm -r $dataset"/"!(*.jpg|*.csv) # for safety, comment this when you share this script with other poeple who can remove important files by mistake.
 
