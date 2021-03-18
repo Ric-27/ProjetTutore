@@ -37,15 +37,15 @@ foot_text_line_2 = ""
 
 pts_src = []
 pts_dst = []
-pts_planes = []
+z_planes = []
 
 pts_plane = []
-priority_defined = False
+level_defined = False
 plane_done = False
-priority = 0
+level = 0
 
-pts_src = [[475,211],[660,247],[1111,322],[915,360],[1163,630],[729,634],[370,638],[162,630],[67,428],[378,360],[233,308]]
-pts_dst = [[2.00,0.0],[11.70,10.70],[22.80,21.70],[16.80,24.00],[16.80,32.20],[11.10,32.20],[7.30,32.20],[5.00,32.20],[0.30,27.00],[5.00,24.00],[0.0,21.00]]
+#pts_src = [[475,211],[660,247],[1111,322],[915,360],[1163,630],[729,634],[370,638],[162,630],[67,428],[378,360],[233,308]]
+#pts_dst = [[2.00,0.0],[11.70,10.70],[22.80,21.70],[16.80,24.00],[16.80,32.20],[11.10,32.20],[7.30,32.20],[5.00,32.20],[0.30,27.00],[5.00,24.00],[0.0,21.00]]
 
 index = 0
 
@@ -84,6 +84,8 @@ while True:
         key_input = "P"
     elif key == ord("q"):
         key_input = "Q"
+    elif key == ord("0"):
+        key_input = "0"
     elif key == ord("1"):
         key_input = "1"
     elif key == ord("2"):
@@ -166,7 +168,7 @@ while True:
         
     elif step == 3:
         foot_text_line_1 = "Select the points of a work plane (min 3), when done press enter to indicate the z level"
-        foot_text_line_2 = "Press enter again to define another plane or q to finish. (c to clear the priority)"
+        foot_text_line_2 = "Press enter again to define another plane or q to finish. (c to clear the level)"
 
         pts_src = np.array(pts_src)
         pts_src = np.concatenate((pts_src,np.zeros((pts_src.shape[0],1),np.int32)),axis=1)
@@ -195,7 +197,7 @@ while True:
     
     elif step == 4:
         if key_input == 'Q':
-            pts_planes = np.array(pts_planes, dtype=object)
+            z_planes = np.array(z_planes, dtype=object)
             step = 5
         if plane_done:
             if key_input == 'C':
@@ -209,18 +211,20 @@ while True:
 
         if enter:
             enter = False
-            if text_input != "" and plane_done and priority_defined == False:
-                priority = int(text_input)
-                priority_defined = True
-            if priority_defined:
+            if text_input != "" and plane_done and level_defined == False:
+                level = int(text_input)
+                level_defined = True
+            if level_defined:
                 pts_plane = np.array(pts_plane, dtype=np.int32)
-                pts_plane = np.concatenate((pts_plane,priority*np.ones((pts_plane.shape[0],1),np.int32)),axis=1)
-                pts_planes.append(pts_plane)
+                pts_plane = np.concatenate((pts_plane,level*np.ones((pts_plane.shape[0],1),np.int32)),axis=1)
+                z_planes.append(pts_plane)
 
+                print(pts_plane)
+                
                 pts_plane = []
                 text_input = ""
                 plane_done = False
-                priority_defined = False
+                level_defined = False
 
                 print("Plane Saved")
 
@@ -237,7 +241,7 @@ while True:
         print("information saved")
         foot_text_line_1 = "Information Saved"
         foot_text_line_2 = "Press esc to exit"
-        np.savez('data', scale = scale, DESIRED_HEIGHT = DESIRED_HEIGHT, pts_src = pts_src, pts_dst = pts_dst, pts_planes = pts_planes)
+        np.savez('data', scale = scale, DESIRED_HEIGHT = DESIRED_HEIGHT, pts_src = pts_src, pts_dst = pts_dst, z_planes = z_planes)
         step = 6
     
     elif step == 6:
@@ -266,9 +270,9 @@ while True:
                 cv2.circle(img,(pt[0],pt[1]),4,red,2)
 
     elif step == 4:
-        if len(pts_planes) > 0:
-            pts_planes_np = np.array(pts_planes, dtype = object)
-            for plane in pts_planes:
+        if len(z_planes) > 0:
+            z_planes_np = np.array(z_planes, dtype = object)
+            for plane in z_planes:
                 pts_plane_draw = plane[:,:2].reshape((-1,1,2))
                 cv2.polylines(img,np.int32([pts_plane_draw]),True,blue,1)
 
@@ -283,13 +287,13 @@ while True:
                 cv2.polylines(img,np.int32([pts_plane_draw]),True,green,2)
                 (x,y),radius = cv2.minEnclosingCircle(pts_plane_draw)
                 if text_input == "":
-                    img_text = "Priority:?"
+                    img_text = "level:?"
                 else:
-                    img_text = "Priority:{}".format(text_input)
-                cv2.putText(img, img_text, (int(x - radius + 5),int(y)), font, font_size, yellow, 2)
+                    img_text = "level:{}".format(text_input)
+                cv2.putText(img, img_text, (int(x),int(y)), font, font_size, yellow, 2)
     
     elif step == 6:
-        for plane in pts_planes:
+        for plane in z_planes:
             pts_plane_draw = plane[:,:2].reshape((-1,1,2))
             cv2.polylines(img,np.int32([pts_plane_draw]),True,red,2)
     
