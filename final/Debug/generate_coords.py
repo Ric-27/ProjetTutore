@@ -4,10 +4,15 @@ import numpy as np
 import argparse
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-img", "--image", type=str, help="path to the configuration image", default="reference.jpg")
+ap.add_argument("-img", "--image", type=str, help="path to the configuration image", default="../reference.jpg")
 args = vars(ap.parse_args())
 
 img = cv2.imread(args["image"],-1)
+
+DESIRED_HEIGHT = 720
+scale = DESIRED_HEIGHT/img.shape[0]
+scaled_width = int(img.shape[1]*scale)
+img = cv2.resize(img, (scaled_width,DESIRED_HEIGHT), interpolation = cv2.INTER_AREA)
 
 points = []
 

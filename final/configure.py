@@ -1,13 +1,19 @@
-#python configure.py -v ../ric_test.mp4
 import cv2
 import numpy as np
 import argparse
+from parameters import DESIRED_HEIGHT,MESUREMENT_SCALE
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-img", "--image", type=str, help="path to the configuration image", default="reference.jpg")
+ap.add_argument("-qd", "--quick", type=bool, help="quick define z-planes", default=False)
 args = vars(ap.parse_args())
 
-step = 0
+quick_txt = args["quick"]
+
+if quick_txt:
+    step = 3
+else:
+    step = 0
 
 red = (0,0,255) #BGR
 green = (0,255,0)
@@ -34,9 +40,15 @@ enter = False
 
 foot_text_line_1 = ""
 foot_text_line_2 = ""
+if quick_txt:
+    pts_src = np.loadtxt("src.txt",dtype=int)
+    pts_src = pts_src
+    pts_dst = np.loadtxt("dst.txt",dtype=int)
+    pts_dst = pts_dst/MESUREMENT_SCALE
+else:
+    pts_src = []
+    pts_dst = []
 
-pts_src = []
-pts_dst = []
 z_planes = []
 
 pts_plane = []
@@ -44,12 +56,7 @@ level_defined = False
 plane_done = False
 level = 0
 
-#pts_src = [[475,211],[660,247],[1111,322],[915,360],[1163,630],[729,634],[370,638],[162,630],[67,428],[378,360],[233,308]]
-#pts_dst = [[2.00,0.0],[11.70,10.70],[22.80,21.70],[16.80,24.00],[16.80,32.20],[11.10,32.20],[7.30,32.20],[5.00,32.20],[0.30,27.00],[5.00,24.00],[0.0,21.00]]
-
 index = 0
-
-DESIRED_HEIGHT = 720
 
 img = cv2.imread(args["image"],-1)
 
@@ -72,7 +79,7 @@ def click(event, x, y, flags, param):
 cv2.namedWindow("Configuration")
 cv2.setMouseCallback("Configuration", click)
 
-foot_text_line_1 = "Click to define the points of reference for the top down view (min 4)"
+foot_text_line_1 = "Click to define the points of reference for the perspective transformation (min 4)"
 
 while True:
     key = cv2.waitKey(5)
@@ -129,12 +136,7 @@ while True:
     elif step == 1:
         foot_text_line_1 = "Input the coordinates (in meters) of the highlighted point, press enter to advance"
         foot_text_line_2 = "c to clear, p to place decimal point, n for negatives"
-        #modify to skip
-        if len(pts_dst) == len(pts_src):
-            step = 3
-        else:
-            step = 2
-            pts_dst = []
+        step = 2
 
     elif step == 2:        
         if text_input == "" and key_input == 'N':
@@ -171,22 +173,20 @@ while True:
         foot_text_line_2 = "Press enter again to define another plane or q to finish. (c to clear the level)"
 
         pts_src = np.array(pts_src)
-        pts_src = np.concatenate((pts_src,np.zeros((pts_src.shape[0],1),np.int32)),axis=1)
-        pts_dst = np.array(pts_dst)*100
+        #pts_src = np.concatenate((pts_src,np.zeros((pts_src.shape[0],1),np.int32)),axis=1)
+        pts_dst = np.array(pts_dst)*MESUREMENT_SCALE
         pts_dst = pts_dst.astype('int32')
-        pts_dst = np.concatenate((pts_dst,np.zeros((pts_dst.shape[0],1),np.int32)),axis=1)
+        #pts_dst = np.concatenate((pts_dst,np.zeros((pts_dst.shape[0],1),np.int32)),axis=1)
         
         window_width = max(pts_dst[:,0])
         window_height = max(pts_dst[:,1])
+        #print(pts_src)
+        #print(pts_dst)
         h, status = cv2.findHomography(pts_src, pts_dst)
         img = cv2.warpPerspective(img, h, (window_width,window_height))
         
         scale = DESIRED_HEIGHT/img.shape[0]
         scaled_width = int(img.shape[1]*scale)
-        
-        #pts_dst = (pts_dst*scale).astype(int)
-
-        #img = imutils.resize(img, height = DESIRED_HEIGHT)
         img = cv2.resize(img, (scaled_width,DESIRED_HEIGHT), interpolation = cv2.INTER_AREA)
         text_banner = np.ones((80, scaled_width, 3),np.uint8)
         img = np.concatenate((img,text_banner),axis=0)
@@ -219,7 +219,7 @@ while True:
                 pts_plane = np.concatenate((pts_plane,level*np.ones((pts_plane.shape[0],1),np.int32)),axis=1)
                 z_planes.append(pts_plane)
 
-                print(pts_plane)
+                #print(pts_plane)
                 
                 pts_plane = []
                 text_input = ""
@@ -234,21 +234,21 @@ while True:
             pts_plane.append([global_x,global_y])
             global_coord_updated = False
 
-
-
-
     elif step == 5:
         print("information saved")
         foot_text_line_1 = "Information Saved"
         foot_text_line_2 = "Press esc to exit"
-        np.savez('data', scale = scale, DESIRED_HEIGHT = DESIRED_HEIGHT, pts_src = pts_src, pts_dst = pts_dst, z_planes = z_planes)
+        np.savez('data', pts_src = pts_src, pts_dst = pts_dst, z_planes = z_planes)
+        if not quick_txt:
+            np.savetxt('src.txt',pts_src, fmt='%d')
+            np.savetxt('dst.txt',pts_dst, fmt='%d')
+            #np.savetxt('z_planes.txt',z_planes) errors when planes are composed by different points
         step = 6
     
     elif step == 6:
         pass
-    
-    #draw
-    
+
+    #draw    
     if step == 0:
         for pt in pts_src:
             cv2.circle(img,(pt[0],pt[1]),4,yellow,2)

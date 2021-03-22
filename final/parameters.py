@@ -1,0 +1,2 @@
+DESIRED_HEIGHT = 720 #in a image with scale 16:9 the pixel size would be 1080 by 720
+MESUREMENT_SCALE = 100 #with a 100 the meters inputed as destination points will be transformed to cm (this manages the resolution of the answer)
