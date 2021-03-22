@@ -8,11 +8,12 @@ from parameters import DESIRED_HEIGHT,MESUREMENT_SCALE
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--config", type=str, help="path to the configuration file", default="data.npz")
 ap.add_argument("-i", "--input", type=str, help="path to the input file", default="input_coordinates.txt")
-ap.add_argument("-img", "--image", type=str, help="path to the reference image", default="NONE")
 
+ap.add_argument("-txt", "--txt", type=bool, help="use txt files", default=False)
 ap.add_argument("-src", "--src", type=str, help="path to the source points", default="src.txt")
 ap.add_argument("-dst", "--dst", type=str, help="path to the destination points", default="dst.txt")
-ap.add_argument("-txt", "--txt", type=bool, help="use txt files", default=False)
+
+ap.add_argument("-img", "--image", type=str, help="path to the reference image", default="NONE")
 args = vars(ap.parse_args())
 
 read_txt = args["txt"]
