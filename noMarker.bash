@@ -7,24 +7,24 @@
 export PATH=/home/iad/Documents/ENSTA/3A/projet_tuteure/micmac/bin:$PATH
 
 # parameters : dataset and master image
-dataset="../test/marker/bedroomMoreMarkerDataset/"
+dataset="../test/Noisy_abraxas_stereo_reduced_jpg/dataset/"
 ##cal_and_ground_imgs_bash="1_*" # expression reguliere tel qu'acceptee par le shell bash
-cal_and_ground_imgs_MM="1_.*" # expression reguliere tel qu'acceptee par MICMAC
-imgs_MM="(1_3|1_5)" 
-master="1_5"
-csv="3D_target.csv"
+cal_and_ground_imgs_MM="SS_.*" # expression reguliere tel qu'acceptee par MICMAC
+imgs_MM="(SS_001_master_now|SS_001_stereo1_now)" 
+master="SS_001_master_now"
+##csv="3D_target.csv"
 
 # parameters : output directory
-outDir="../test/marker/AllCalibTwodepth_RadialBasic_-1_noMarker_Out/" # don't create this directory inside the dataset (or it is going to be removed)
+outDir="../test/Noisy_abraxas_stereo_reduced_jpg/OutMasterStereo1NoExifReduced/" # don't create this directory inside the dataset (or it is going to be removed)
 
 # parameters : script
 ##markerToMicmacpy="./markerToMicmac.py"
 ##dicoAppuisXMLpy="./dicoAppuisXML.py"
-thisBashFile="./ExtraImgCalGround.bash"
+thisBashFile="./noMarker.bash"
 
 # parameters : other MICMAC paramters
 cameraModel="RadialBasic" # RadialBasic 5 parameters, RadialStd 8 parameters
-tapiocaImgResolution="-1" #1500 seems standard. -1 for full resolution
+tapiocaImgResolution="1500" #1500 seems standard. -1 for full resolution
 Arbitrary="Arbitrary"
 ##Ground_Init="Ground_Init"
 Ground="Arbitrary"
