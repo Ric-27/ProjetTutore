@@ -32,5 +32,3 @@ noMarker.bash est une version de ExtraImgCalGround.bash sans les marker ArUco (p
 dicoAppuisXML.py et markerToMicmac.py sont respectivement les script python de conversion du csv en xml et de detection des marker dans l'image et ecris dans un xml
 
 affichage.py permet d'afficher les nuage de points .ply (non utilisé dans le processus)
-
-marker.py permet de generer des marker pour impression ou des les detecter et de les afficher dans l'image (non utilisé dans le processus)
